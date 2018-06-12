@@ -1,32 +1,32 @@
-import { GET_DECKS, GET_DECK, SAVE_DECK, ADD_CARD_TO_DECK } from "../actions";
+import { GET_DECKS, SAVE_DECK, ADD_CARD_TO_DECK } from "../actions";
 
 const entries = (state = {}, action) => {
-  console.log("Reducer state", JSON.stringify(state));
-  console.log("Reducer action decks", JSON.stringify(action));
   switch (action.type) {
     case GET_DECKS:
-      return (
-        action.decks
-      )
-    case GET_DECK:
-      return action.deck;
-    case  SAVE_DECK:
       return {
         ...state,
-        [action.key]: action.deck
-      }
+        ...action.decks
+      };
+    case SAVE_DECK:
+      return {
+        ...state,
+        [action.title.trim().replace(" ", "")]: {title: action.title}
+      };
     case ADD_CARD_TO_DECK:
       // TODO: Clone state
       const newDeck = state[action.key];
+      if (!newDeck["questions"]) {
+        newDeck["questions"] = [];
+      }
       newDeck["questions"].push(action.card);
       return {
         ...state,
-        [action.key] : newDeck
+        [action.key]: newDeck
       };
     default:
       return state;
   }
-}
+};
 
 export default entries;
 

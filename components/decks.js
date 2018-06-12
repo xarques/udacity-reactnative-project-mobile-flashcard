@@ -1,31 +1,123 @@
 import React, {Component } from 'react';
-import { View, Text, Stylesheet } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Platform,
+  TouchableOpacity,
+  ScrollView
+ } from 'react-native';
 import { connect } from "react-redux";
-import * as actions from "../actions";
+import { getDecks } from "../actions";
+import { fetchDecks } from "../utils/api";
+import { AppLoading } from "expo";
+import { purple, white } from "../utils/colors";
+import { FontAwesome, Ionicons } from "@expo/vector-icons";
 
 class Decks extends Component {
+  state = {
+    ready: false
+  };
 
-
-  componentDidMount = () => {
-    this.props.dispatch(actions.fetchDecks());
+  componentDidMount() {
+    const { dispatch } = this.props;
+    fetchDecks()
+      .then(decks => {
+        dispatch(getDecks(JSON.parse(decks)));
+      })
+      .then(() => this.setState(() => ({ ready: true })));
   }
+
+  renderItem = (title, key, size) => (
+    <View key={key}>
+      <TouchableOpacity
+        style={styles.item}
+        onPress={() => this.props.navigation.navigate("Deck", { key })}
+      >
+        <Text key={key} style={{fontSize: 30}}>Deck {title}</Text>
+        <Text style={{ fontSize: 15 }}>
+          {size} question{size > 0 ? "s" : ""}
+        </Text>
+      </TouchableOpacity>
+    </View>
+  );
 
   render() {
-    console.log("Deck props ", JSON.stringify(this.props));
-    console.log("Deck state ", this.state);
     const { decks } = this.props;
+    const { ready } = this.state;
+
+    if (ready === false) {
+      return <AppLoading />;
+    }
     return (
-      <View>
-        {Object.keys(decks).map(key => {
-          const { title, questions } = decks[key];
-          return (
-            <Text key={key}>Deck {title}</Text>
-          )
-        })}
+      <View style={styles.container}>
+        <ScrollView>
+          {decks &&
+            Object.keys(decks).map(key => {
+              const { title, questions } = decks[key];
+              return this.renderItem(
+                title,
+                key,
+                questions ? questions.length : 0
+              );
+            })}
+        </ScrollView>
+        <TouchableOpacity
+          style={styles.buttonContainer}
+          onPress={() => this.props.navigation.navigate("AddDeck")}
+        >
+          <Ionicons
+            name={Platform.OS === "ios" ? "ios-add-circle" : "md-add-circle"}
+            style={styles.button}
+          />
+        </TouchableOpacity>
       </View>
-    )
+    );
   }
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "space-between"
+  },
+  item: {
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: white,
+    borderRadius: Platform.OS === "ios" ? 16 : 2,
+    padding: 20,
+    marginLeft: 20,
+    marginRight: 20,
+    marginTop: 17,
+    justifyContent: "center",
+    shadowRadius: 3,
+    shadowOpacity: 0.8,
+    shadowColor: "rgba(0,0,0,0.24)",
+    shadowOffset: {
+      width: 0,
+      height: 3
+    }
+  },
+  buttonContainer: {
+    // backgroundColor: 'green',
+    // alignItems: 'center',
+    // justifyContent: 'center',
+    // borderRadius: 50,
+    // width: 80,
+    // height: 80,
+    // marginRight: 20,
+    // marginBottom: 10,
+    // backgroundColor: 'green',
+  },
+  button: {
+    position: "absolute",
+    bottom: 14,
+    right: 20,
+    color: "#01a699",
+    fontSize: 100,
+    fontWeight: "900"
+  }
+});
 
 const mapStateToProps = state => {
   return {
