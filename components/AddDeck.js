@@ -1,5 +1,5 @@
 import React, { Component} from "react";
-import {View, Text, StyleSheet, TextInput } from "react-native";
+import { View, Text, StyleSheet, TextInput } from "react-native";
 import { connect } from "react-redux";
 import { saveDeckTitle } from "../utils/api";
 import { saveDeck } from "../actions";
