@@ -1,9 +1,10 @@
 import React, { Component} from "react";
-import {View, Text, StyleSheet, Platform, TouchableOpacity, TextInput } from "react-native";
+import {View, Text, StyleSheet, TextInput } from "react-native";
 import { connect } from "react-redux";
 import { addCardToDeck } from "../utils/api";
 import { addCard } from "../actions";
 import TextButton from "./TextButton";
+import DeckHeader from "./DeckHeader";
 
 class AddCard extends Component {
   state = {
@@ -22,9 +23,10 @@ class AddCard extends Component {
   };
 
   render() {
+    const { title, size } = this.props;
     return (
-      <View>
-        <Text style={styles.title}>Name of the new Deck</Text>
+      <View style={{flex:1}}>
+        <DeckHeader title={title} size={size} />
         <TextInput
           style={styles.input}
           onChangeText={question => this.setState({ question })}
@@ -58,14 +60,18 @@ const styles = StyleSheet.create({
     borderColor: 'grey',
     borderWidth: 1,
     margin: 10,
-    padding:5,
+    padding: 5,
     fontSize: 20,
   }
 })
 
 const mapStateToProps = (state, navigation) => {
+  const deckKey = navigation.navigation.state.params.key;
+  const size = state[deckKey].questions ? state[deckKey].questions.length : 0
   return {
-    deckKey: navigation.navigation.state.params.key
+    deckKey,
+    title: state[deckKey].title,
+    size
   };
 };
 

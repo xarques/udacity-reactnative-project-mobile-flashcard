@@ -1,5 +1,5 @@
 import React, { Component} from "react";
-import {View, Text, StyleSheet, Platform, TouchableOpacity, TextInput } from "react-native";
+import {View, Text, StyleSheet, TextInput } from "react-native";
 import { connect } from "react-redux";
 import { saveDeckTitle } from "../utils/api";
 import { saveDeck } from "../actions";
@@ -7,38 +7,38 @@ import TextButton from "./TextButton";
 
 class AddDeck extends Component {
   state = {
-    text: ''
-  }
+    text: ""
+  };
 
   submit = () => {
     this.props.dispatch(saveDeck(this.state.text));
-    this.toHome();
+    this.toDeck(this.state.text.trim().replace(" ", ""));
     saveDeckTitle(this.state.text);
-  }
+  };
 
-  toHome = () => {
-    this.props.navigation.navigate("Decks");
-  }
+  toDeck = key => {
+    this.props.navigation.navigate("Deck", { key });
+  };
 
   render() {
     return (
       <View>
-        <Text style={styles.title}>
-          Name of the new Deck
-        </Text>
+        <Text style={styles.title}>Name of the new Deck</Text>
         <TextInput
           style={styles.input}
-          onChangeText={text => this.setState({text})}
-          placeholder='Deck name'
+          onChangeText={text => this.setState({ text })}
+          placeholder="Deck name"
           value={this.state.text}
         />
         <TextButton
-          disabled={this.state.text === ''}
+          disabled={this.state.text === ""}
           styles={{ padding: 10 }}
           onPress={this.submit}
-        >Submit</TextButton>
+        >
+          Create Deck
+        </TextButton>
       </View>
-    )
+    );
   }
 }
 

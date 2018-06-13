@@ -7,6 +7,7 @@ import Decks from "./components/Decks";
 import Deck from "./components/Deck";
 import AddDeck from "./components/AddDeck";
 import AddCard from "./components/AddCard";
+import Quiz from "./components/Quiz";
 
 import { DECK_STORAGE_KEY } from "./utils/api";
 import { purple, white } from "./utils/colors";
@@ -58,7 +59,16 @@ const MainNavigator = createStackNavigator({
       }
     }
   },
-
+  Quiz: {
+    screen: Quiz,
+    navigationOptions: {
+      title: "Quiz",
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: purple
+      }
+    }
+  }
 });
 
 export default class App extends Component {

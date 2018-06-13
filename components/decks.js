@@ -12,7 +12,7 @@ import { getDecks } from "../actions";
 import { fetchDecks } from "../utils/api";
 import { AppLoading } from "expo";
 import { purple, white } from "../utils/colors";
-import { FontAwesome, Ionicons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 
 class Decks extends Component {
   state = {
@@ -34,9 +34,9 @@ class Decks extends Component {
         style={styles.item}
         onPress={() => this.props.navigation.navigate("Deck", { key })}
       >
-        <Text key={key} style={{fontSize: 30}}>Deck {title}</Text>
+        <Text key={key} style={{fontSize: 30}}>{title}</Text>
         <Text style={{ fontSize: 15 }}>
-          {size} question{size > 0 ? "s" : ""}
+          {size} card{size > 1 ? "s" : ""}
         </Text>
       </TouchableOpacity>
     </View>
@@ -63,7 +63,6 @@ class Decks extends Component {
             })}
         </ScrollView>
         <TouchableOpacity
-          style={styles.buttonContainer}
           onPress={() => this.props.navigation.navigate("AddDeck")}
         >
           <Ionicons
@@ -97,17 +96,6 @@ const styles = StyleSheet.create({
       width: 0,
       height: 3
     }
-  },
-  buttonContainer: {
-    // backgroundColor: 'green',
-    // alignItems: 'center',
-    // justifyContent: 'center',
-    // borderRadius: 50,
-    // width: 80,
-    // height: 80,
-    // marginRight: 20,
-    // marginBottom: 10,
-    // backgroundColor: 'green',
   },
   button: {
     position: "absolute",

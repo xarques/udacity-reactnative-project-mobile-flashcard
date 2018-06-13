@@ -5,11 +5,12 @@ import {white, purple} from '../utils/colors'
 const TextButton = ({ children, onPress, disabled = false, style = {} }) => (
   <TouchableOpacity
     style={
-      Platform.OS === "ios" ? styles.iosSubmitBtn : styles.androidSubmitBtn
+      [Platform.OS === "ios" ? styles.iosSubmitBtn : styles.androidSubmitBtn,
+      style]
     }
     disabled={disabled}
     onPress={onPress}>
-    <Text style={[styles.submitBtnTxt, style]}>{children}</Text>
+    <Text style={[styles.submitBtnTxt]}>{children}</Text>
   </TouchableOpacity>
 );
 
@@ -20,7 +21,8 @@ const styles = StyleSheet.create({
     borderRadius: 7,
     height: 45,
     marginLeft: 40,
-    marginRight: 40
+    marginRight: 40,
+    marginBottom: 40
   },
   androidSubmitBtn: {
     backgroundColor: purple,
