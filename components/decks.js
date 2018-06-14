@@ -28,13 +28,15 @@ class Decks extends Component {
       .then(() => this.setState(() => ({ ready: true })));
   }
 
-  renderItem = (title, key, size) => (
-    <View key={key}>
+  renderItem = (title, deckKey, size) => (
+    <View key={deckKey}>
       <TouchableOpacity
         style={styles.item}
-        onPress={() => this.props.navigation.navigate("Deck", { key })}
+        onPress={() => this.props.navigation.navigate("Deck", { deckKey })}
       >
-        <Text key={key} style={{fontSize: 30}}>{title}</Text>
+        <Text key={deckKey} style={{ fontSize: 30 }}>
+          {title}
+        </Text>
         <Text style={{ fontSize: 15 }}>
           {size} card{size > 1 ? "s" : ""}
         </Text>

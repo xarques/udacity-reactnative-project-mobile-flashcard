@@ -12,11 +12,11 @@ class Deck extends Component {
       <DeckHeader title={deck.title} size={size} />
       <View style={styles.buttons}>
         {size > 0 &&
-          <TextButton style={{}} onPress={() => this.props.navigation.navigate("Quiz", { key: deckKey })}>
+          <TextButton style={{}} onPress={() => this.props.navigation.navigate("Quiz", { deckKey })}>
             Start Quizz
           </TextButton>
         }
-        <TextButton style={{ }} onPress={() => this.props.navigation.navigate("AddCard", { key: deckKey})}>
+        <TextButton style={{ }} onPress={() => this.props.navigation.navigate("AddCard", { deckKey })}>
         Add Card
         </TextButton>
       </View>
@@ -39,14 +39,16 @@ const styles = StyleSheet.create({
     flex: 0.8,
     alignItems: "center",
     justifyContent: "flex-start",
-    margin: 10
+    margin: 10,
+    padding:10
   }
 });
 
 const mapStateToProps = (state, navigation) => {
+  const deckKey = navigation.navigation.state.params.deckKey;
   return {
-    deckKey: navigation.navigation.state.params.key,
-    deck: state[navigation.navigation.state.params.key]
+    deckKey,
+    deck: state[deckKey]
   };
 };
 

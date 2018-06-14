@@ -16,8 +16,10 @@ class AddDeck extends Component {
     saveDeckTitle(this.state.text);
   };
 
-  toDeck = key => {
-    this.props.navigation.navigate("Deck", { key });
+  toDeck = deckKey => {
+    // Replace the AddDeck component from the navigation stack
+    // to avoid coming back to this screen when the user presses Back key
+    this.props.navigation.replace("Deck", { deckKey });
   };
 
   render() {

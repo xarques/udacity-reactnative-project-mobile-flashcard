@@ -2,6 +2,8 @@ import React, { Component} from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { connect } from "react-redux";
 import TextButton from "./TextButton";
+import DeckHeader from "./DeckHeader";
+import { clearLocalNotification, setLocalNotification} from "../utils/helpers";
 
 class Quiz extends Component {
   state = {
@@ -42,6 +44,11 @@ class Quiz extends Component {
     }))
   }
 
+  complete = () => {
+    clearLocalNotification()
+      .then(setLocalNotification);
+  }
+
   renderQuestionOrAnswer = ({ question, answer }) => {
     return <View style={styles.quiz}>
       <View style={styles.question}>
@@ -71,29 +78,38 @@ class Quiz extends Component {
   render() {
     const { cardNumber, score, displayQuestion } = this.state;
     const { deckKey, deck } = this.props;
+    const title = deck.title;
     const size = deck.questions ? deck.questions.length : 0;
     if (cardNumber <= size - 1) {
       const questions = deck.questions;
       const question = questions[cardNumber].question;
       const answer = questions[cardNumber].answer;
       return <View style={styles.quiz}>
-        <Text style={styles.counter}>
+        <DeckHeader
+          title={title}
+          size={size}
+          cardNumber={cardNumber}
+        />
+        {/* <Text style={styles.counter}>
           {cardNumber + 1}/{size}
-        </Text>
+        </Text> */}
         {this.renderQuestionOrAnswer(displayQuestion ? { question } : { answer })}
       </View>;
     } else {
+      // Reschedule notification
+      this.complete();
       return <View style={styles.quiz}>
-        <View style={styles.header}>
-          <Text style={{ fontSize: 30 }}>
-            Your score is {score}/{size}
-          </Text>
-        </View>
+        <DeckHeader
+          title={title}
+          size={size}
+          score={score}
+          cardNumber={cardNumber}
+        />
         <View style={styles.buttons}>
           <TextButton onPress={this.reset}>Restart Quiz</TextButton>
           <TextButton
             onPress={() =>
-              this.props.navigation.navigate("Deck", { key: deckKey })
+              this.props.navigation.navigate("Deck", { deckKey })
             }
           >
             Back To Deck
@@ -135,9 +151,10 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state, navigation) => {
+  const deckKey = navigation.navigation.state.params.deckKey;
   return {
-    deckKey: navigation.navigation.state.params.key,
-    deck: state[navigation.navigation.state.params.key]
+    deckKey,
+    deck: state[deckKey]
   };
 };
 

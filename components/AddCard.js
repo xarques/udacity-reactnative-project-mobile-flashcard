@@ -15,17 +15,19 @@ class AddCard extends Component {
   submit = () => {
     this.props.dispatch(addCard(this.state, this.props.deckKey));
     this.toDeck();
-    addCardToDeck({card: this.state, key: this.props.deckKey});
+    addCardToDeck({ card: this.state, key: this.props.deckKey });
   };
 
   toDeck = () => {
-    this.props.navigation.navigate("Deck", { key: this.props.deckKey });
+    // Replace the AddCard component from the navigation stack
+    // to avoid coming back to this screen when the user presses Back key
+    this.props.navigation.replace("Deck", { deckKey: this.props.deckKey });
   };
 
   render() {
     const { title, size } = this.props;
     return (
-      <View style={{flex:1}}>
+      <View style={{ flex: 1 }}>
         <DeckHeader title={title} size={size} />
         <TextInput
           style={styles.input}
@@ -40,10 +42,12 @@ class AddCard extends Component {
           value={this.state.answer}
         />
         <TextButton
-          disabled={this.state.question === '' || this.state.answer === ''}
+          disabled={this.state.question === "" || this.state.answer === ""}
           styles={{ padding: 10 }}
           onPress={this.submit}
-        >Submit</TextButton>
+        >
+          Submit
+        </TextButton>
       </View>
     );
   }
@@ -66,7 +70,7 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = (state, navigation) => {
-  const deckKey = navigation.navigation.state.params.key;
+  const deckKey = navigation.navigation.state.params.deckKey;
   const size = state[deckKey].questions ? state[deckKey].questions.length : 0
   return {
     deckKey,

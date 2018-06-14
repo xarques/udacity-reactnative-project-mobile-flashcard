@@ -9,7 +9,7 @@ import AddDeck from "./components/AddDeck";
 import AddCard from "./components/AddCard";
 import Quiz from "./components/Quiz";
 
-import { DECK_STORAGE_KEY } from "./utils/api";
+import { setLocalNotification } from "./utils/helpers";
 import { purple, white } from "./utils/colors";
 import { Constants } from "expo";
 
@@ -72,9 +72,8 @@ const MainNavigator = createStackNavigator({
 });
 
 export default class App extends Component {
-
-  componentWillMount() {
-    // AsyncStorage.removeItem(DECK_STORAGE_KEY);
+  componentDidMount = () => {
+    setLocalNotification();
   }
 
   render() {
