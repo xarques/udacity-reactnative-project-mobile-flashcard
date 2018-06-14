@@ -19,7 +19,8 @@ class AddDeck extends Component {
   toDeck = deckKey => {
     // Replace the AddDeck component from the navigation stack
     // to avoid coming back to this screen when the user presses Back key
-    this.props.navigation.replace("Deck", { deckKey });
+    this.props.navigation.replace("Home");
+    this.props.navigation.navigate("Deck", { deckKey });
   };
 
   render() {

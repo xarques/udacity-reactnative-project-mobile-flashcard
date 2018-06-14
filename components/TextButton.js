@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
     paddingLeft: 30,
     paddingRight: 30,
     borderRadius: 2,
+    marginBottom: 40,
     height: 45,
     alignSelf: 'flex-end',
     justifyContent: 'center',

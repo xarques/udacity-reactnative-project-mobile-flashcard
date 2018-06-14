@@ -64,14 +64,6 @@ class Decks extends Component {
               );
             })}
         </ScrollView>
-        <TouchableOpacity
-          onPress={() => this.props.navigation.navigate("AddDeck")}
-        >
-          <Ionicons
-            name={Platform.OS === "ios" ? "ios-add-circle" : "md-add-circle"}
-            style={styles.button}
-          />
-        </TouchableOpacity>
       </View>
     );
   }
@@ -98,14 +90,6 @@ const styles = StyleSheet.create({
       width: 0,
       height: 3
     }
-  },
-  button: {
-    position: "absolute",
-    bottom: 14,
-    right: 20,
-    color: "#01a699",
-    fontSize: 100,
-    fontWeight: "900"
   }
 });
 

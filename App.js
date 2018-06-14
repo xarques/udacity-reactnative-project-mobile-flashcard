@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, StatusBar, Text, View, AsyncStorage } from "react-native";
+import { StyleSheet, StatusBar, Text, View, AsyncStorage, Platform } from "react-native";
 import { createStore } from "redux";
 import { Provider } from 'react-redux';
 import reducer from './reducers';
@@ -8,37 +8,94 @@ import Deck from "./components/Deck";
 import AddDeck from "./components/AddDeck";
 import AddCard from "./components/AddCard";
 import Quiz from "./components/Quiz";
+import { Ionicons } from "@expo/vector-icons";
 
 import { setLocalNotification } from "./utils/helpers";
 import { purple, white } from "./utils/colors";
 import { Constants } from "expo";
 
 import {
+  createBottomTabNavigator,
+  createMaterialTopTabNavigator,
   createStackNavigator
 } from "react-navigation";
+
 const UdacityStatusBar = ({ backgroundColor, ...props }) => (
   <View style={{ backgroundColor, height: Constants.statusBarHeight }}>
     <StatusBar translucent backgroundColor={backgroundColor} {...props} />
   </View>
 )
 
+const tabsStructure = {
+  Decks: {
+    screen: Decks,
+    navigationOptions: {
+      tabBarLabel: "Decks",
+      tabBarIcon: ({ tintColor }) => (
+        <Ionicons name="ios-bookmarks" size={30} color={tintColor} />
+      )
+    }
+  },
+  NewDeck: {
+    screen: AddDeck,
+    navigationOptions: {
+      tabBarLabel: "Add Deck",
+      tabBarIcon: ({ tintColor }) => (
+        <Ionicons name="ios-add" size={30} color={tintColor} />
+      )
+    }
+  }
+};
+
+const tabBarOptions = {
+  activeTintColor: Platform.OS === "ios" ? purple : white,
+  style: {
+    height: 56,
+    backgroundColor: Platform.OS === "ios" ? white : purple,
+    shadowColor: 'rgba(0,0,0,0.24)',
+    shadowOffset: {
+      width: 0,
+      height: 3
+    },
+    shadowRadius: 6,
+    shadowOpacity: 1
+  }
+}
+
+const navigationOptions = {
+  header: null
+}
+
+const Tabs =
+  Platform.OS === "ios"
+    ? createBottomTabNavigator(tabsStructure, {
+      navigationOptions, tabBarOptions
+    })
+    : createMaterialTopTabNavigator(tabsStructure, { tabBarOptions });
+
 const MainNavigator = createStackNavigator({
+  Home: {
+    screen: Tabs,
+    navigationOptions: {
+      title: "FlashCards"
+    }
+  },
   Decks: {
     screen: Decks,
     navigationOptions: {
       title: "FlashCards"
     }
   },
-  AddDeck: {
-    screen: AddDeck,
-    navigationOptions: {
-      title: "Add a deck",
-      headerTintColor: white,
-      headerStyle: {
-        backgroundColor: purple
-      }
-    }
-  },
+  // AddDeck: {
+  //   screen: AddDeck,
+  //   navigationOptions: {
+  //     title: "Add a deck",
+  //     headerTintColor: white,
+  //     headerStyle: {
+  //       backgroundColor: purple
+  //     }
+  //   }
+  // },
   Deck: {
     screen: Deck,
     navigationOptions: {
